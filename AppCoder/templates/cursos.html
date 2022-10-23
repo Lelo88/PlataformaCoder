@@ -1,12 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    <h1>Vista de cursos desde el template</h1>
-</body>
-</html>
+{% extends 'padre.html' %}
+
+
+{% block contenidoQueCambia %}
+    <h1>Vista de cursos</h1>
+    <h4>Estos son nuestros cursos disponibles:</h4>
+    {% for curso in lista_cursos %}
+        <li>{{curso.nombre}} - {{curso.camada}}</li>
+    {% endfor %}
+{% endblock contenidoQueCambia %}
+    

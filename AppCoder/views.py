@@ -20,7 +20,10 @@ def inicio(request):
     return render(request,'inicio.html')
 
 def cursos(request):
-    return render(request,'profesores.html')
+    
+    lista = Curso.objects.all()
+    
+    return render(request,'cursos.html',{"lista_cursos": lista})
 
 def estudiantes(request):
     return render(request,'estudiantes.html')
@@ -29,4 +32,4 @@ def profesores(request):
     return render(request,'profesores.html')
 
 def entregables(request):
-    return render(request,'entregable.html')
+    return render(request,'entregables.html')
