@@ -1,8 +1,8 @@
 from django.shortcuts import render,redirect
 from django.http import HttpResponse
 
-from .models import Curso
-from .forms import CursoFormulario
+from .models import Curso, Profesor, Estudiante
+from .forms import CursoFormulario, ProfesoresFormulario, EstudiantesFormulario, FormularioInicial
 
 # Create your views here.
 def curso(request, nombre, camada):
@@ -61,8 +61,17 @@ def busqueda_camada(request):
 
 def buscar(request):
     
+    
     camada_buscada = request.GET['camada']
     
-    curso = Curso.objects.get(camada = camada_buscada)
+    if Curso.objects.filter(camada=camada_buscada).exists():
+        
+        curso = Curso.objects.get(camada = camada_buscada) #if agregado para poder saber si esta o no en la base de datos
     
-    return render(request, 'resultadoBusqueda.html', {'curso': curso, 'camada': camada_buscada})
+        return render(request, 'resultadoBusqueda.html', {'curso': curso, 'camada': camada_buscada})
+    
+    else:
+        
+        respuesta = 'No se encuentra ese curso registrado'
+        
+        return render(request, 'resultadoBusqueda.html', {'respuesta': respuesta})

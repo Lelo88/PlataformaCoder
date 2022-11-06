@@ -3,8 +3,17 @@
 {% load static %}
 
 {% block contenidoQueCambia %}
-        
+    
+    {% if camada %}
     <p> El curso con la camada: {{ camada }} </p>
     <h4> {{curso.nombre}} </h4>
+    
+    {% else %}
+
+    <p>{{respuesta}}</p>
+
+    {% endif %}
+         
+    
 
 {% endblock contenidoQueCambia %}
