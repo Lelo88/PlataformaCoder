@@ -7,9 +7,13 @@
     <h4>Acá se muestra la lista de profesores activos</h4>
 
     <ul>
-        <li>Mauricio Cuello</li>
-        <li>Pepe Argento</li>
-        <li>Lionel Messi</li>
+        
+        {% for profesor in lista_profesores %}
+            <li>{{profesor}}</li>
+            <div>
+            </div>
+        {% endfor %}
+            
     </ul>
 {% endblock contenidoQueCambia %}
     

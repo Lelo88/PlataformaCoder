@@ -14,8 +14,3 @@ class EstudiantesFormulario(forms.Form):
     nombre = forms.CharField()
     apellido = forms.CharField()
     email = forms.EmailField()
-    
-class FormularioInicial(forms.Form):
-    cursos = forms.ChoiceField()
-    profesor = forms.ChoiceField()
-    estudiantes = forms.ChoiceField()    

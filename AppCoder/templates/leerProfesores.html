@@ -1,0 +1,23 @@
+{% extends 'padre.html' %}
+
+<!--template creado a partir de la clase 22-->
+{% block contenidoQueCambia %}
+    <h1>Lista de profesores</h1>
+    <ul>
+        
+        {% for profesor in profesores %}
+            <li>{{profesor}}</li> 
+            <div>
+                <form action="{% url 'EliminaProfesor' profesor.id %}" method="POST"> {% csrf_token %}
+                    <!--lepasamos el id para que reconozca el id designado al profesor-->
+                    <button type="submit">Eliminar</button>
+                    <button>
+                        <a href="{% url 'EditarProfesor' profesor.id %}">Editar</a>
+                    </button>
+                </form>
+            </div>
+        {% endfor %}
+            
+    </ul>
+{% endblock contenidoQueCambia %}
+    
