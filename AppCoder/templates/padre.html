@@ -27,7 +27,15 @@
                 <a class="navbar-brand" href="{% url 'Entregables' %}">Entregables</a>
                 <a class="navbar-brand" href="{% url 'CursoFormulario' %}">Formulario</a>
                 <a class="navbar-brand" href="{% url 'busqueda_camada' %}">Buscar Camada</a>
-                <a class="btn btn-primary" href="#signup">Iniciar</a>
+                
+                {% if user.is_authenticated %} <!--Creacion de login y logout al autenticarse-->
+                    <p>Bienvenido {{user.username}}</p>
+                    <a class="btn btn-primary" href="{% url 'Logout' %}">Logout</a>
+                {% else %}
+                <a class="btn btn-primary" href="{% url 'Login' %}">Login</a>
+                {% endif %}
+                    
+                
             </div>
         </nav>
         <!-- Masthead-->

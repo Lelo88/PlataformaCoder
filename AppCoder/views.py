@@ -6,6 +6,11 @@ from .forms import CursoFormulario, ProfesoresFormulario, EstudiantesFormulario
 from django.views.generic import ListView #Estas views agregadas van a ayudarnos con el dinamismo de django
 from django.views.generic.edit import DeleteView, UpdateView, CreateView
 from django.views.generic.detail import DetailView
+from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
+from django.contrib.auth import login, logout, authenticate
+from django.contrib.auth.decorators import login_required
+from django.contrib.admin.views.decorators import staff_member_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 # Create your views here.
 def curso(request, nombre, camada):
@@ -24,6 +29,7 @@ def lista_curso(request):
 def inicio(request):
     return render(request,'inicio.html')
 
+@login_required #sintaxis de decoradores / solo pueden ver este template lo que esten logueados
 def cursos(request):
     
     lista = Curso.objects.all()
@@ -33,6 +39,7 @@ def cursos(request):
 def estudiantes(request):
     return render(request,'estudiantes.html')
 
+@staff_member_required(login_url = '/app-coder/login') #solo pueden ver lo ques estan logueados como superusuarios
 def profesores(request):
     
     lista = Profesor.objects.all()
@@ -157,7 +164,7 @@ def editarProfesor(request, id):
         return render(request, 'editarProfesor.html', {'mi_formulario': mi_formulario, 'id': profesor.id})  
 
 
-class CursoList(ListView):
+class CursoList(LoginRequiredMixin, ListView): #En vez de decoradores, se hereda de LoginRequiredMixin el "acceso" cuando estemos logueados
     
     model = Curso
     template_name = 'curso_list.html'
@@ -190,3 +197,59 @@ class CursoDelete(DeleteView):
     template_name = 'curso_delete.html'
     success_url = '/app-coder/'
     
+def login_formulario(request): #clase 23 definimos el logueo para ingresar a nuestra aplicacion
+    
+    if request.method == 'POST':
+        
+        mi_formulario = AuthenticationForm (request, data=request.POST) # sacamos de authentication form el formulario para crear el logueo
+        
+        if mi_formulario.is_valid():
+            
+            data = mi_formulario.cleaned_data
+            
+            usuario = data['username'] #username y password son atributos del formulario de autenticacion
+            psw = data['password'] 
+            
+            user = authenticate(username = usuario, password = psw)
+            
+            if user:
+                
+                login(request, user)
+                
+                return render(request, "inicio.html", {"mensaje": f'Bienvenido {usuario}'})
+            
+            else:
+                
+                return render(request, "inicio.html", {"mensaje": f'Datos incorrectos'})
+        
+        return render(request, "inicio.html", {'mensaje': f'Error, formulario invalido'})
+    
+    else:
+        
+        mi_formulario=AuthenticationForm()
+        
+        return render(request, 'login.html', {'mi_formulario':mi_formulario})
+    
+def registrar(request):
+        
+    if request.method == 'POST':
+        
+        mi_formulario = UserCreationForm(request.POST)
+        
+        if mi_formulario.is_valid():
+            
+            username = mi_formulario.cleaned_data['username']
+            
+            mi_formulario.save()
+            
+            return render(request, 'inicio.html' , {'mensaje': f'Usuario {username} creado con exito'})
+        
+        else:
+            
+            return render(request, 'inicio.html', {'mensaje': f'Error al crear el usuario'})
+    
+    else:
+        
+        mi_formulario = UserCreationForm()
+        
+        return render(request, 'registro.html', {'mi_formulario': mi_formulario})

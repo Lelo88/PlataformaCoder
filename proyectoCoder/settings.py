@@ -122,3 +122,5 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+LOGIN_URL = '/app-coder/login' #lo agregamos en el caso de que se quiera ingresar a una determinada parte de la app si no estamos logueados

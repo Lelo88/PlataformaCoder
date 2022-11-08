@@ -1,6 +1,7 @@
 
 from django.urls import path
-from .views import (CursoCreate, CursoDelete, 
+from .views import  (CursoCreate, 
+                    CursoDelete, 
                     CursoDetail, 
                     CursoList, 
                     CursoUpdate, 
@@ -11,11 +12,14 @@ from .views import (CursoCreate, CursoDelete,
                     entregables, 
                     estudiantes, 
                     inicio, 
-                    lista_curso, 
+                    lista_curso, login_formulario, 
                     profesores, 
                     busqueda_camada, 
                     buscar, 
-                    listaProfesores)
+                    listaProfesores, 
+                    registrar)
+
+from django.contrib.auth.views import LogoutView
 
 urlpatterns = [
     path('agrega-curso/<nombre>/<camada>', curso),
@@ -36,5 +40,8 @@ urlpatterns = [
     path('detalleCurso/<pk>', CursoDetail.as_view(), name='DetalleCursos'),
     path('creaCurso/', CursoCreate.as_view(), name='CreaCurso'),
     path('actualizaCurso/<pk>', CursoUpdate.as_view(), name='ActualizaCurso'),
-    path('eliminarCurso/<pk>', CursoDelete.as_view(), name='EliminarCurso')
+    path('eliminarCurso/<pk>', CursoDelete.as_view(), name='EliminarCurso'),
+    path('login/',login_formulario,name='Login'),
+    path('registrar/', registrar, name='Registro'),
+    path('logout/', LogoutView.as_view(template_name='logout.html'), name='Logout') #la view se crea directamente desde acá
 ]
