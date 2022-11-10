@@ -1,8 +1,8 @@
 from django.shortcuts import render,redirect
 from django.http import HttpResponse
 
-from .models import Curso, Profesor, Estudiante
-from .forms import CursoFormulario, ProfesoresFormulario, EstudiantesFormulario
+from .models import Curso, Profesor, Estudiante, Avatar
+from .forms import CursoFormulario, ProfesoresFormulario, UserEditForm, UserRegisterForm
 from django.views.generic import ListView #Estas views agregadas van a ayudarnos con el dinamismo de django
 from django.views.generic.edit import DeleteView, UpdateView, CreateView
 from django.views.generic.detail import DetailView
@@ -27,7 +27,10 @@ def lista_curso(request):
     return render(request,'lista-cursos.html',{"lista_cursos": lista})
 
 def inicio(request):
-    return render(request,'inicio.html')
+    
+    avatar = Avatar.objects.get(user=request.user)
+    
+    return render(request,'inicio.html', {'url':avatar.imagen.url})
 
 @login_required #sintaxis de decoradores / solo pueden ver este template lo que esten logueados
 def cursos(request):
@@ -59,7 +62,7 @@ def cursoFormulario(request):
         print(mi_formulario)
         if mi_formulario.is_valid():
             data = mi_formulario.cleaned_data
-            curso = Curso(nombre=data['curso'], camada=data['camada'])
+            curso = Curso(nombre=data['nombre'], camada=data['camada'])
             curso.save()
             return redirect('Cursos')
             # return render(request, 'inicio.html')
@@ -234,7 +237,7 @@ def registrar(request):
         
     if request.method == 'POST':
         
-        mi_formulario = UserCreationForm(request.POST)
+        mi_formulario = UserRegisterForm(request.POST)
         
         if mi_formulario.is_valid():
             
@@ -246,10 +249,39 @@ def registrar(request):
         
         else:
             
-            return render(request, 'inicio.html', {'mensaje': f'Error al crear el usuario'})
+            return render(request, 'inicio.html', {'mensaje': f'Error al crear el u(suario'})
     
     else:
         
-        mi_formulario = UserCreationForm()
+        mi_formulario = UserRegisterForm()
         
         return render(request, 'registro.html', {'mi_formulario': mi_formulario})
+    
+def editarPerfil(request): #clase 24 view de edicion de perfil
+
+    usuario = request.user
+
+    if request.method == 'POST':
+        
+        mi_formulario = UserEditForm(request.POST)
+        
+        if mi_formulario.is_valid():
+            
+            data = mi_formulario.cleaned_data
+            
+            usuario.first_name = data['first_name']
+            usuario.last_name = data['last_name']
+            usuario.email = data['email']
+            usuario.set_password(data['password1']) #metodo de hasheado para que guarde la nueva contraseña
+            
+            usuario.save()
+            
+            return render(request, 'inicio.html',{'mensaje': f'Datos actualizados en perfil!'})
+        
+        return render(request, 'editarPerfil.html', {'mensaje': f'Las contraseñas  no coinciden!'}) # en el caso de que no sea valido las password 
+        
+    else:
+        
+        mi_formulario = UserEditForm(instance = request.user)
+        
+        return render(request, 'editarPerfil.html',{'mi_formulario': mi_formulario})

@@ -1,0 +1,12 @@
+{% extends 'padre.html' %}
+
+
+{% block contenidoQueCambia %}
+    <form action="" method="POST"> {% csrf_token %}
+        {{mi_formulario.as_p}}
+
+        {{mensaje}}
+        <input type="submit" value="Actualizar">
+    </form>
+{% endblock contenidoQueCambia %}
+    

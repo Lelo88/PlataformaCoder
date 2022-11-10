@@ -8,7 +8,7 @@ from .views import  (CursoCreate,
                     creaProfesor, 
                     curso, 
                     cursoFormulario, 
-                    cursos, editarProfesor, eliminarProfesor, 
+                    cursos, editarPerfil, editarProfesor, eliminarProfesor, 
                     entregables, 
                     estudiantes, 
                     inicio, 
@@ -43,5 +43,6 @@ urlpatterns = [
     path('eliminarCurso/<pk>', CursoDelete.as_view(), name='EliminarCurso'),
     path('login/',login_formulario,name='Login'),
     path('registrar/', registrar, name='Registro'),
-    path('logout/', LogoutView.as_view(template_name='logout.html'), name='Logout') #la view se crea directamente desde acá
+    path('logout/', LogoutView.as_view(template_name='logout.html'), name='Logout'),#la view se crea directamente desde acá
+    path('editar-perfil/', editarPerfil, name='EditarPerfil')
 ]
