@@ -35,7 +35,7 @@ def inicio(request):
 @login_required #sintaxis de decoradores / solo pueden ver este template lo que esten logueados
 def cursos(request):
     
-    lista = Curso.objects.all()
+    lista = Curso.objects.filter(profesor_curso__nombre = 'Luna')
     
     return render(request,'cursos.html',{"lista_cursos": lista})
 
